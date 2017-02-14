@@ -74,12 +74,7 @@
     </div>
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/Scripts/GrossSalaryCalculator.js")
-}
-
-
-<!--<script>
+<script>
     // call a JavaScript function once the page has loaded 
     window.onload = function () {
        myFunction(@Model.SalaryOnHands);
@@ -112,7 +107,7 @@
             npd = 0;
         }
 
-        document.getElementById("netSalary").innerHTML = x.toFixed(2) + " €";
+        document.getElementById("netSalary").innerHTML = netSalary.toFixed(2) + " €";
         document.getElementById("grossSalary").innerHTML = grossSalary.toFixed(2) + " €";
         document.getElementById("fullCost").innerHTML = (grossSalary + (grossSalary * employerTax)).toFixed(2) + " €";
 
@@ -123,4 +118,4 @@
         document.getElementById("pensionInsurance").innerHTML = (grossSalary * pensionInsurance).toFixed(2) + " €";
         document.getElementById("npd").innerHTML = npd.toFixed(2) + " €";
     }
-</script>-->
+</script>
