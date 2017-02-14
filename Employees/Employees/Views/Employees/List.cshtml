@@ -1,0 +1,55 @@
+﻿@model PagedList.IPagedList<Employees.Models.ViewModel>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{  ViewBag.Title = "List";   }
+
+<div class="row">
+    <div class="col-md-8">
+        <br />
+        <p>
+            <a href="/employees/new" class="btn btn-primary">Add new employee</a>
+        </p>
+        @using (Html.BeginForm("List", "Employees", FormMethod.Get, new { @class = "form-horizontal" }))
+        {
+            <p>
+                Name: @Html.TextBox("employeeName")
+                Last Name: @Html.TextBox("employeeLastName")
+                <input type="submit" value="Filter" />
+            </p>
+        }
+        <hr />
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Last Name</th>
+                        <th>Net Salary</th>
+                        <th>Gross Salary</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var employee in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(model => employee.Name)</td>
+                            <td>@Html.DisplayFor(model => employee.LastName)</td>
+                            <td>@Html.DisplayFor(model => employee.SalaryOnHands)</td>
+                            <td>@Html.DisplayFor(model => employee.SalaryOnPaper)</td>
+                            <td>
+                                @Html.ActionLink("Delete", "Delete", new { id = employee.Id }) |
+                                @Html.ActionLink("Edit", "Update", new { id = employee.Id })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("List",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+    </div>
