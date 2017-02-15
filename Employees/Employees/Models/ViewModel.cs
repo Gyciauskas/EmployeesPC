@@ -15,7 +15,6 @@ namespace Employees.Models
         [Display(Name = "Net Salary")]
         public double SalaryOnHands { get; set; }
 
-        [Range(1, 10000)]
         [DataType(DataType.Currency)]
         [Display(Name = "Gross Salary")]
         public double SalaryOnPaper { get; set; }

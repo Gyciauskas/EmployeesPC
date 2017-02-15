@@ -8,6 +8,7 @@
         @using (Html.BeginForm(new { @class = "form-horizontal" }))
         {
             @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.SalaryOnPaper);
             <div class="form-horizontal">
                 <h4>@Html.DisplayFor(model => model.Name) @Html.DisplayFor(model => model.LastName)</h4>
                 <hr />
@@ -77,10 +78,11 @@
 <script>
     // call a JavaScript function once the page has loaded 
     window.onload = function () {
-       myFunction(@Model.SalaryOnHands);
+        myFunction(@Model.SalaryOnHands);
     };
 
-    function myFunction(netSalary) {
+    function myFunction(x) {
+        var netSalary = parseFloat(x);
         var grossSalary;
         var mmaWage = 380;
         var baseNPD = 310;
@@ -90,12 +92,13 @@
         var employerTax = 0.3118;
         var npd = 0;
 
+        //for case, then you couldn't update new salary and come back to page
         if (netSalary == null) {
             return;
         }
 
         if (netSalary <= 335.3) {
-            grossSalary = (netSalary - 46.5) / (1 - (incomeTax + healthInsurance + pensionInsurance));
+            grossSalary = (x - 46.5) / (1 - (incomeTax + healthInsurance + pensionInsurance));
             npd = baseNPD;
         }
         else if (netSalary < 760) {
@@ -110,9 +113,7 @@
         document.getElementById("netSalary").innerHTML = netSalary.toFixed(2) + " €";
         document.getElementById("grossSalary").innerHTML = grossSalary.toFixed(2) + " €";
         document.getElementById("fullCost").innerHTML = (grossSalary + (grossSalary * employerTax)).toFixed(2) + " €";
-
         document.getElementById("employerTax").innerHTML = (grossSalary * employerTax).toFixed(2) + " €";
-        //
         document.getElementById("incomeTax").innerHTML = ((grossSalary - npd) * incomeTax).toFixed(2) + " €";
         document.getElementById("healthInsurance").innerHTML = (grossSalary * healthInsurance).toFixed(2) + " €";
         document.getElementById("pensionInsurance").innerHTML = (grossSalary * pensionInsurance).toFixed(2) + " €";

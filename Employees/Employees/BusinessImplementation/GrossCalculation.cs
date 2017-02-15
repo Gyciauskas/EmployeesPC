@@ -14,7 +14,6 @@ namespace Employees.BusinessImplementation
             double healthInsurance = 0.06;
             double pensionInsurance = 0.03;
 
-            // some comments
             if (netSalary <= 335.3)
             {
                 grossSalary = (netSalary - 46.5) / (1 - (incomeTax + healthInsurance + pensionInsurance));
