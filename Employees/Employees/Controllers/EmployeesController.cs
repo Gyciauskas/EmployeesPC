@@ -63,7 +63,7 @@ namespace Employees.Controllers
         {
             var employee = _employeeService.GetEmployee(id);
 
-            // Work around'as...
+            // Work around
             var viewModel = new ViewModel
             {
                 Name = employee.Name,

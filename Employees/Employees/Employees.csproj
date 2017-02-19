@@ -181,6 +181,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="BusinessContract\IEmployeeService.cs" />
+    <Compile Include="BusinessContract\IGrossCalculation.cs" />
     <Compile Include="BusinessImplementation\EmployeeService.cs" />
     <Compile Include="BusinessImplementation\GrossCalculation.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />

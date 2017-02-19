@@ -45,15 +45,15 @@
                         <td id="npd"></td>
                     </tr>
                     <tr>
-                        <td>Incomes tax 15%</td>
+                        <td>Incomes tax @System.Configuration.ConfigurationManager.AppSettings["incomeTax"]%</td>
                         <td id="incomeTax"></td>
                     </tr>
                     <tr>
-                        <td>"Sodra" health insurance 6%</td>
+                        <td>"Sodra" health insurance @System.Configuration.ConfigurationManager.AppSettings["healthInsurance"]%</td>
                         <td id="healthInsurance"></td>
                     </tr>
                     <tr>
-                        <td>"Sodra" pension and social insurance 3%</td>
+                        <td>"Sodra" pension and social insurance @System.Configuration.ConfigurationManager.AppSettings["pensionInsurance"]%</td>
                         <td id="pensionInsurance"></td>
                     </tr>
                     <tr class="success">
@@ -64,7 +64,7 @@
                         <td>Employer taxes</td>
                     </tr>
                     <tr>
-                        <td>"Sodra" 31.18%</td>
+                        <td>"Sodra" @System.Configuration.ConfigurationManager.AppSettings["employerTax"]%</td>
                         <td id="employerTax" class="textright"></td>
                     </tr>
                     <tr class="success">
@@ -93,7 +93,7 @@
         var pensionInsurance = parseFloat('@System.Configuration.ConfigurationManager.AppSettings["pensionInsurance"]') / 100;
         var employerTax = parseFloat('@System.Configuration.ConfigurationManager.AppSettings["employerTax"]') / 100;
         var npd = 0;
-        
+
         //for case, then you couldn't update new salary and come back to page
         if (netSalary == null) {
             return;

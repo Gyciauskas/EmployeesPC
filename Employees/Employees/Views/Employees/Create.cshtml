@@ -5,7 +5,6 @@
 
 @using (Html.BeginForm("Create", "Employees", FormMethod.Post, new { @class = "form-horizontal" }))
 {
-    @Html.ValidationSummary()
     @Html.AntiForgeryToken()
     <h4>Create a new employee</h4>
     <hr />

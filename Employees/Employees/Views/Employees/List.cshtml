@@ -13,8 +13,8 @@
         @using (Html.BeginForm("List", "Employees", FormMethod.Get, new { @class = "form-horizontal" }))
         {
             <p>
-                Name: @Html.TextBox("employeeName")
-                Last Name: @Html.TextBox("employeeLastName")
+                Name @Html.TextBox("employeeName")
+                Last Name @Html.TextBox("employeeLastName")
                 <input type="submit" value="Filter" />
             </p>
         }
@@ -40,7 +40,7 @@
                             <td>@Html.DisplayFor(model => employee.SalaryOnPaper)</td>
                             <td>
                                 @Html.ActionLink("Delete", "Delete", new { id = employee.Id}, new { onclick = "return confirm('You will delete current employee!');" }) |
-                                @Html.ActionLink("Edit", "Update", new { id = employee.Id })
+                                @Html.ActionLink("Edit & Details", "Update", new { id = employee.Id })
                             </td>
                         </tr>
                     }

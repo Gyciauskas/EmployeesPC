@@ -9,7 +9,7 @@ namespace Employees.BusinessImplementation
 {
     public class EmployeeService : IEmployeeService
     {
-        GrossCalculation grossCalculation = new GrossCalculation();
+        IGrossCalculation grossCalculation = new GrossCalculation();
 
         public void CreateEmployee(Employee employee)
         {

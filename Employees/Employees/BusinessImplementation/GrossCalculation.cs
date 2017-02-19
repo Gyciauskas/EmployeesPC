@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Employees.BusinessContract;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -6,13 +7,13 @@ using System.Web;
 
 namespace Employees.BusinessImplementation
 {
-    public class GrossCalculation
+    public class GrossCalculation : IGrossCalculation
     {
         public double Count(double netSalary)
         {
+            double grossSalary = 0;
             double baseNPD = Double.Parse(ConfigurationManager.AppSettings["baseNPD"]);
             double mmaWage = Double.Parse(ConfigurationManager.AppSettings["mmaWage"]);
-            double grossSalary = 0;
             double incomeTax = Double.Parse(ConfigurationManager.AppSettings["incomeTax"]) / 100;
             double healthInsurance = Double.Parse(ConfigurationManager.AppSettings["healthInsurance"]) / 100;
             double pensionInsurance = Double.Parse(ConfigurationManager.AppSettings["pensionInsurance"]) / 100;
