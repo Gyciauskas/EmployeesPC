@@ -39,7 +39,7 @@
                             <td>@Html.DisplayFor(model => employee.SalaryOnHands)</td>
                             <td>@Html.DisplayFor(model => employee.SalaryOnPaper)</td>
                             <td>
-                                @Html.ActionLink("Delete", "Delete", new { id = employee.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = employee.Id}, new { onclick = "return confirm('You will delete current employee!');" }) |
                                 @Html.ActionLink("Edit", "Update", new { id = employee.Id })
                             </td>
                         </tr>

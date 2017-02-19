@@ -14,12 +14,11 @@
                 <hr />
                 <div class="form-group">
                     @Html.LabelFor(model => model.SalaryOnHands, new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.SalaryOnHands, new { @class = "form-control", @onchange = "myFunction(this.value)" })
+                    <div class="col-xs-3">
+                        @Html.TextBoxFor(model => model.SalaryOnHands, new { @class = "form-control", @onchange = "myFunction(this.value)" }) 
                         @Html.ValidationMessageFor(model => model.SalaryOnHands)
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Save" class="btn btn-default" />
@@ -32,41 +31,44 @@
         </div>
     </div>
     <div class="col-md-5">
-        <h4>Salary in details</h4>
+        <h4>Salary details</h4>
         <hr />
         <div class="container">
             <table class="table">
                 <tbody>
                     <tr class="success">
-                        <td>Priskaičiuotas atlyginimas "ant popieriaus"</td>
-                        <td id="grossSalary"></td>
-                    </tr>
-                    <tr>
-                        <td>Pritaikytas NPD</td>
-                        <td id="npd"></td>
-                    </tr>
-                    <tr>
-                        <td>Pajamų mokestis 15%</td>
-                        <td id="incomeTax"></td>
-                    </tr>
-                    <tr>
-                        <td>Sodra. Sveikatos draudimas 6%</td>
-                        <td id="healthInsurance"></td>
-                    </tr>
-                    <tr>
-                        <td>Sodra. Pensijų ir soc. draudimas 3%</td>
-                        <td id="pensionInsurance"></td>
-                    </tr>
-                    <tr>
-                        <td>Išmokamas atlyginimas "į rankas"</td>
+                        <td>Net salary</td>
                         <td id="netSalary"></td>
                     </tr>
                     <tr>
-                        <td>Sodra 31.18%</td>
+                        <td>NPD</td>
+                        <td id="npd"></td>
+                    </tr>
+                    <tr>
+                        <td>Incomes tax 15%</td>
+                        <td id="incomeTax"></td>
+                    </tr>
+                    <tr>
+                        <td>"Sodra" health insurance 6%</td>
+                        <td id="healthInsurance"></td>
+                    </tr>
+                    <tr>
+                        <td>"Sodra" pension and social insurance 3%</td>
+                        <td id="pensionInsurance"></td>
+                    </tr>
+                    <tr class="success">
+                        <td>Gross salary</td>
+                        <td id="grossSalary"></td>
+                    </tr>
+                    <tr>
+                        <td>Employer taxes</td>
+                    </tr>
+                    <tr>
+                        <td>"Sodra" 31.18%</td>
                         <td id="employerTax" class="textright"></td>
                     </tr>
                     <tr class="success">
-                        <td>Visa darbo vietos kaina</td>
+                        <td>Full work place cost</td>
                         <td id="fullCost"></td>
                     </tr>
                 </tbody>
@@ -76,7 +78,7 @@
 </div>
 
 <script>
-    // call a JavaScript function once the page has loaded 
+    // call a JavaScript function once the page has loaded
     window.onload = function () {
         myFunction(@Model.SalaryOnHands);
     };
@@ -84,25 +86,31 @@
     function myFunction(x) {
         var netSalary = parseFloat(x);
         var grossSalary;
-        var mmaWage = 380;
-        var baseNPD = 310;
-        var incomeTax = 0.15;
-        var healthInsurance = 0.06;
-        var pensionInsurance = 0.03;
-        var employerTax = 0.3118;
+        var mmaWage = parseFloat('@System.Configuration.ConfigurationManager.AppSettings["mmaWage"]');
+        var baseNPD = parseFloat('@System.Configuration.ConfigurationManager.AppSettings["baseNPD"]');
+        var incomeTax = parseFloat('@System.Configuration.ConfigurationManager.AppSettings["incomeTax"]') / 100;
+        var healthInsurance = parseFloat('@System.Configuration.ConfigurationManager.AppSettings["healthInsurance"]') / 100;
+        var pensionInsurance = parseFloat('@System.Configuration.ConfigurationManager.AppSettings["pensionInsurance"]') / 100;
+        var employerTax = parseFloat('@System.Configuration.ConfigurationManager.AppSettings["employerTax"]') / 100;
         var npd = 0;
-
+        
         //for case, then you couldn't update new salary and come back to page
         if (netSalary == null) {
             return;
         }
 
         if (netSalary <= 335.3) {
-            grossSalary = (x - 46.5) / (1 - (incomeTax + healthInsurance + pensionInsurance));
-            npd = baseNPD;
+            if (netSalary == 0 || netSalary < 0) {
+                grossSalary = 0;
+                netSalary = 0;
+            }
+            else {
+                grossSalary = (x - (incomeTax * baseNPD)) / (1 - (incomeTax + healthInsurance + pensionInsurance));
+                npd = baseNPD;
+            }
         }
-        else if (netSalary < 760) {
-            grossSalary = (netSalary - 75) / (1 - ((incomeTax * 1.5) + healthInsurance + pensionInsurance));
+        else if (netSalary <= 760) {
+            grossSalary = (netSalary - (0.15 * (baseNPD + (mmaWage / 2)))) / (1 - ((incomeTax * 1.5) + healthInsurance + pensionInsurance));
             npd = baseNPD - 0.5 * (grossSalary - mmaWage);
         }
         else {
@@ -114,7 +122,13 @@
         document.getElementById("grossSalary").innerHTML = grossSalary.toFixed(2) + " €";
         document.getElementById("fullCost").innerHTML = (grossSalary + (grossSalary * employerTax)).toFixed(2) + " €";
         document.getElementById("employerTax").innerHTML = (grossSalary * employerTax).toFixed(2) + " €";
-        document.getElementById("incomeTax").innerHTML = ((grossSalary - npd) * incomeTax).toFixed(2) + " €";
+
+        // if gross salary equal or less 310eu, income taxes equal 0.
+        if (netSalary <= 282.1)
+            document.getElementById("incomeTax").innerHTML = 0;
+        else
+            document.getElementById("incomeTax").innerHTML = ((grossSalary - npd) * incomeTax).toFixed(2) + " €";
+
         document.getElementById("healthInsurance").innerHTML = (grossSalary * healthInsurance).toFixed(2) + " €";
         document.getElementById("pensionInsurance").innerHTML = (grossSalary * pensionInsurance).toFixed(2) + " €";
         document.getElementById("npd").innerHTML = npd.toFixed(2) + " €";
